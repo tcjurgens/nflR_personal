@@ -6,6 +6,9 @@
   #filter(home_coach == '' 
   #filter(home_qb_name == ''
   #filter(spread_line == ''   , etc.
+             
+  ## When spread_line > 0 the home team was favored by that many points
+  ## When results > 0 the home team won the game by that many points
   mutate(
     ATS_win = case_when(
       result - spread_line > 0 ~ 1   # HOME team covered
