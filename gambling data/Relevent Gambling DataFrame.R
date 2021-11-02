@@ -1,6 +1,6 @@
 library(tidyverse)
 library(glue)
-library(nflfastR)
+library(nflreadr)
 
 #### Use this start of code when filtering for specific team data
 
@@ -17,6 +17,20 @@ gambling_dataf <-load_sharpe_data("games") %>%
 
 # change gametime to character type column so its easier to filter 
 gambling_dataf$gametime <- as.character(gambling_dataf$gametime)
+
+gambling_dataf <- gambling_dataf %>%
+  mutate(
+    ATS_win = case_when(result - spread_line > 0 ~ 1),
+    ATS_loss = case_when(result - spread_line < 0 ~ 1),
+    ATS_push = case_when(result - spread_line == 0 ~ 2)
+  ) %>%
+  mutate(
+    over = case_when(total - total_line > 0 ~ 1),
+    under = case_when(total - total_line < 0 ~ 1),
+    push = case_when(total - total_line == 0 ~ 2)
+  )
+
+  
 
 
 
