@@ -23,29 +23,29 @@ thursday_games <- gambling_dataf %>%
          !is.na(home_score)
          )
 
+#filter so favored home teams spread_line column will now be negative
+for(row in 1:nrow(thursday_games)) {
+  thursday_games[row,'spread_line'] <- (thursday_games[row,'spread_line'])*-1
+}
+#result column will be negative if the home team wins outright
+for(row in 1:nrow(thursday_games)) {
+  thursday_games[row,'result'] <- (thursday_games[row,'result'])*-1
+}
+
+#add spread and total results
+# ATS_win signifies that the home team has covered
 thursday_games <- thursday_games %>%
   mutate(
-    ATS_win = case_when(
-      result - spread_line > 0 ~ 1   # HOME team covered
-    ),
-    ATS_loss = case_when(
-      result - spread_line < 0 ~ -1  # HOME team did not cover
-    ),
-    ATS_push = case_when(
-      result - spread_line == 0 ~ 2
-    )
+    ATS_win = case_when(result - spread_line < 0 ~ 1),
+    ATS_loss = case_when(result - spread_line > 0 ~ -1),
+    ATS_push = case_when(result - spread_line == 0 ~ 2)
   ) %>%
   mutate(
-    over = case_when(
-      total - total_line > 0 ~ 1   # HOME team covered
-    ),
-    under = case_when(
-      total - total_line < 0 ~ -1  # HOME team did not cover
-    ),
-    push = case_when(
-      total - total_line == 0 ~ 2
-    )
+    over = case_when(total - total_line > 0 ~ 1),
+    under = case_when(total - total_line < 0 ~ -1),
+    push = case_when(total - total_line == 0 ~ 2)
   )
+
 
 
 home_ats_thursday <- (sum(thursday_games$ATS_win, na.rm = TRUE))

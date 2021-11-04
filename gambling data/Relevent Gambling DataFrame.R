@@ -18,15 +18,26 @@ gambling_dataf <-load_sharpe_data("games") %>%
 # change gametime to character type column so its easier to filter 
 gambling_dataf$gametime <- as.character(gambling_dataf$gametime)
 
+#filter so favored home teams spread_line column will now be negative
+for(row in 1:nrow(gambling_dataf)) {
+  gambling_dataf[row,'spread_line'] <- (gambling_dataf[row,'spread_line'])*-1
+}
+#result column will be negative if the home team wins outright
+for(row in 1:nrow(gambling_dataf)) {
+  gambling_dataf[row,'result'] <- (gambling_dataf[row,'result'])*-1
+}
+
+#add spread and total results
+# ATS_win signifies that the home team has covered
 gambling_dataf <- gambling_dataf %>%
   mutate(
-    ATS_win = case_when(result - spread_line > 0 ~ 1),
-    ATS_loss = case_when(result - spread_line < 0 ~ 1),
+    ATS_win = case_when(result - spread_line < 0 ~ 1),
+    ATS_loss = case_when(result - spread_line > 0 ~ -1),
     ATS_push = case_when(result - spread_line == 0 ~ 2)
   ) %>%
   mutate(
     over = case_when(total - total_line > 0 ~ 1),
-    under = case_when(total - total_line < 0 ~ 1),
+    under = case_when(total - total_line < 0 ~ -1),
     push = case_when(total - total_line == 0 ~ 2)
   )
 
