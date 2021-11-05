@@ -1,6 +1,5 @@
 library(tidyverse)
 library(glue)
-library(nflreadr)
 
 #### Use this start of code when filtering for specific team data
 
@@ -32,13 +31,13 @@ for(row in 1:nrow(gambling_dataf)) {
 gambling_dataf <- gambling_dataf %>%
   mutate(
     ATS_win = case_when(result - spread_line < 0 ~ 1),
-    ATS_loss = case_when(result - spread_line > 0 ~ -1),
-    ATS_push = case_when(result - spread_line == 0 ~ 2)
+    ATS_loss = case_when(result - spread_line > 0 ~ 1),
+    ATS_push = case_when(result - spread_line == 0 ~ 1)
   ) %>%
   mutate(
     over = case_when(total - total_line > 0 ~ 1),
-    under = case_when(total - total_line < 0 ~ -1),
-    push = case_when(total - total_line == 0 ~ 2)
+    under = case_when(total - total_line < 0 ~ 1),
+    push = case_when(total - total_line == 0 ~ 1)
   )
 
   

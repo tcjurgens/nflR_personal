@@ -24,7 +24,7 @@ gambling_dataf <- gambling_dataf %>%
   mutate(
     over = case_when(total - total_line > 0 ~ 1),
     under = case_when(total - total_line < 0 ~ 1),
-    push = case_when(total - total_line == 0 ~ 2)
+    push = case_when(total - total_line == 0 ~ 1)
   )
 
 # filtering practice
@@ -44,7 +44,7 @@ road_favorites_2021 <- road_favorites_2021 %>%
   mutate(
     ATS_w = case_when(result - spread_line < 0 ~ 1),
     ATS_l = case_when(result - spread_line > 0 ~ 1),
-    ATS_push = case_when(result - spread_line == 0 ~ 2)
+    ATS_push = case_when(result - spread_line == 0 ~ 1)
   )
 
 
