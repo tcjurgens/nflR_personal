@@ -24,10 +24,10 @@ rodgers <- gambling_dataf %>%
       result - spread_line > 0 ~ 1   # HOME team covered
     ),
     ATS_loss = case_when(
-      result - spread_line < 0 ~ -1  # HOME team did not cover
+      result - spread_line < 0 ~ 1  # HOME team did not cover
     ),
     ATS_push = case_when(
-      result - spread_line == 0 ~ 2
+      result - spread_line == 0 ~ 1
     )
   ) %>%
   mutate(
@@ -35,16 +35,16 @@ rodgers <- gambling_dataf %>%
       total - total_line > 0 ~ 1
     ),
     under = case_when(
-      total - total_line < 0 ~ -1
+      total - total_line < 0 ~ 1
     ),
     push = case_when(
-      total - total_line == 0 ~ 2
+      total - total_line == 0 ~ 1
       )
   )
 
 home_ats_wins <- (sum(home_bears_games$ATS_win, na.rm = TRUE))
-road_ats_wins <- (-sum(home_bears_games$ATS_loss, na.rm = TRUE))
-ats_push <- (sum(home_bears_games$ATS_push, na.rm = TRUE))/2 
+road_ats_wins <- (sum(home_bears_games$ATS_loss, na.rm = TRUE))
+ats_push <- (sum(home_bears_games$ATS_push, na.rm = TRUE)) 
 
 # BAD BET
 chi_home_cover_pct = round((home_ats_wins/sum(home_ats_wins,road_ats_wins,ats_push))*100,3)
